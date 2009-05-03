@@ -49,6 +49,54 @@ module Dm
         rankings.sort!
         rankings.reverse!
       end
+
+      # calculate the item similarity scores for each items with each other items
+      # used for item based filtering
+      def calculate_similar_items(data, n=10, metric = Pearson.new)
+        result = {}
+
+        item_prefs = Dm::Similar::transform_pref(data)
+
+        c = 0
+        item_prefs.each do |item, similar|
+          c += 1
+
+          # print a counter for progress report (for large database)
+          puts "#{c} / #{item_prefs.size}" if c%100 == 0
+
+          # find score for similar item
+          result[item] = top_matches(item_prefs, item, n, metric)
+        end
+
+        result
+      end
+
+      # recommended items base on item based filtering
+      def get_recommended_items(data, item_sim, user)
+        user_rating = data[user]
+        scores = {}
+        total_sim = {}
+
+        user_rating.each do |item, rating|
+          item_sim[item].each do |similarity, item2|
+            if user_rating[item2].nil?
+              # weighted sum of rating times similarity
+              scores[item2] ||= 0
+              scores[item2] += similarity*rating
+
+              # sum of all similarities
+              total_sim[item2] ||= 0
+              total_sim[item2] += similarity
+            end
+          end
+        end
+
+        rankings = scores.collect do |item, score|
+          [score/total_sim[item], item]
+        end
+        rankings.sort!
+        rankings.reverse!       
+      end
     end
   end
 end
