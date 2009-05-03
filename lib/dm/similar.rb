@@ -2,7 +2,7 @@ module Dm
   module Similar
     # Distance Metric base class
     class MetricBase
-      def distance(data1, data2)
+      def distance(data, user1, user2)
       end
 
       def shared_items(data1, data2)
@@ -13,7 +13,9 @@ module Dm
 
     # Implement Euclidean Distance
     class EuclideanDistance < MetricBase
-      def distance(data1, data2)
+      def distance(data, user1, user2)
+        data1 = data[user1]
+        data2 = data[user2]
         shared_keys = shared_items(data1, data2)
 
         # if no rating in commin, return 0
@@ -30,7 +32,9 @@ module Dm
 
     # Implement Pearson Correlation Score
     class Pearson < MetricBase
-      def distance(data1, data2)
+      def distance(data, user1, user2)
+        data1 = data[user1]
+        data2 = data[user2]
         shared_keys = shared_items(data1, data2)
 
         # if no rating in commin, return 0
