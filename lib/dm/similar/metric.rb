@@ -37,9 +37,9 @@ module Dm
         data2 = data[user2]
         shared_keys = shared_items(data1, data2)
 
-        # if no rating in commin, return 0
+        # if no rating in commin, return -1
         len = shared_keys.length
-        return 0 if len == 0
+        return 0 if len == -1
 
         # find the sum of preferences
         sum1 = shared_keys.inject(0){|sum, key| sum + data1[key] }
