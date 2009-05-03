@@ -4,5 +4,5 @@ require 'yaml'
 data = YAML.load(File.open("../config/data.yml"))
 #metric = Dm::Similar::Pearson.new
 
-similar = Dm::Similar::Similarity.new
-puts similar.top_matches(data, "Toby", 3).inspect
+rec = Dm::Similar::Recommendation.new
+puts rec.top_matches(data, "Toby", 3).inspect

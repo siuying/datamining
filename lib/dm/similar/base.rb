@@ -1,6 +1,6 @@
 module Dm
   module Similar
-    class Similarity
+    class Recommendation
       def top_matches(data, person, n = 5, metric = Pearson.new)
         raise StandardError.new("n must be positive integer") if n < 1
 
